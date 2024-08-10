@@ -1,11 +1,19 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateUser } from './dtos/CreateUser.dto';
 
 @Controller('users')
 export class UsersController {
   @Get()
-  getUsers() {
-    return { id: 1, name: 'omid' };
+  getUsers(@Query('sortBy') sortBy: string) {
+    console.log(sortBy);
+    return [
+      { id: 1, name: 'omid' },
+      { id: 2, name: 'ali' },
+      { id: 3, name: 'reza' },
+      { id: 4, name: 'javad' },
+      { id: 5, name: 'hamid' },
+      { id: 6, name: 'sina' },
+    ];
   }
 
   @Post('create')
