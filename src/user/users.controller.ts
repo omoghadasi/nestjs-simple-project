@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreateUser } from './dtos/CreateUser.dto';
 
 @Controller('users')
@@ -17,12 +27,13 @@ export class UsersController {
   }
 
   @Post('create')
+  @UsePipes(new ValidationPipe())
   createUser(@Body() userData: CreateUser) {
     return userData;
   }
 
   @Get(':id')
-  getUserById(@Param('id') id: string) {
+  getUserById(@Param('id', ParseIntPipe) id: number) {
     return { id };
   }
 }
