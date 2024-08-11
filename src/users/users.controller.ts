@@ -2,38 +2,33 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
-  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateUser } from './dtos/CreateUser.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private UsersService: UsersService) {}
   @Get()
-  getUsers(@Query('sortBy') sortBy: string) {
-    console.log(sortBy);
-    return [
-      { id: 1, name: 'omid' },
-      { id: 2, name: 'ali' },
-      { id: 3, name: 'reza' },
-      { id: 4, name: 'javad' },
-      { id: 5, name: 'hamid' },
-      { id: 6, name: 'sina' },
-    ];
+  getUsers() {
+    return this.UsersService.fetchAllUsers();
+  }
+
+  @Get(':id')
+  getUserById(@Param('id', ParseIntPipe) id: number) {
+    return this.UsersService.fetchUserById(id);
   }
 
   @Post('create')
   @UsePipes(new ValidationPipe())
   createUser(@Body() userData: CreateUser) {
-    return userData;
-  }
-
-  @Get(':id')
-  getUserById(@Param('id', ParseIntPipe) id: number) {
-    return { id };
+    return this.UsersService.createUser(userData);
   }
 }
